@@ -17,39 +17,42 @@ int FirstPage()
     printf("                \t\t Developed in C Language\n");
     printf("               \t\t  Save | Search | Delete\n");
     printf("-----------------------------------------------------\n");
-    printf("                    Loading.......");
-
+    printf("                    Loading....");
+    fflush(stdout);
     for (int i = 0; i < 6; i++)
     {
         printf(".");
         fflush(stdout);
-        for (volatile long j = 0; j < 20000000; j++)
-            ; // smaller busy loop
+        for (int j = 0; j < 200000000; j++) ; 
     }
     printf("\n\n");
     return 0;
 }
 
+// adding contact in book
 void addContact()
 {
     CB c;
-    FILE *fp = fopen("contact/contacts_list.txt", "a");
+    const char *path = "contact/contacts_list.txt"; 
+    FILE *fp = fopen(path, "a");
+
     if (fp == NULL)
     {
-        printf("Error opening file! Make sure 'contact' directory exists.\n");
+        printf("Error opening file '%s'!\n", path);
         return;
     }
 
     printf("Enter Name: ");
-    scanf("%49s", c.name); // limit width
+    scanf("%49s", c.name);
 
     while (1)
     {
-        printf("Enter Phone Number (10 digits): ");
+        printf("Enter Phone Number: ");
         scanf("%19s", c.phone);
+
         if (strlen(c.phone) != 10)
         {
-            printf("Invalid Phone Number! Please enter a 10-digit number.\n");
+            printf("\nInvalid Phone Number! Please enter a 10-digit number.\n");
         }
         else
         {
@@ -63,16 +66,19 @@ void addContact()
     printf("Contact Added Successfully!\n");
 }
 
+// viewing contacts in book
 void viewContacts()
 {
     CB c;
-    FILE *fp = fopen("contact/contacts_list.txt", "r");
+    const char *path = "contact/contacts_list.txt";
+    FILE *fp = fopen(path, "r");
+
     if (fp == NULL)
     {
         printf("No contacts found!\n");
         return;
     }
-
+    // displaying contact list
     printf("\n--- Contact List ---\n");
     while (fscanf(fp, "%49s %19s", c.name, c.phone) == 2)
     {
@@ -81,19 +87,21 @@ void viewContacts()
     fclose(fp);
 }
 
+// searching contact in book
 void searchContact()
 {
     CB c;
     char searchName[50];
     int found = 0;
+    const char *path = "contact/contacts_list.txt";
 
-    FILE *fp = fopen("contact/contacts_list.txt", "r");
+    FILE *fp = fopen(path, "r");
     if (fp == NULL)
     {
         printf("No contacts found!\n");
         return;
     }
-
+    // getting name to search
     printf("Enter name to search: ");
     scanf("%49s", searchName);
 
@@ -114,27 +122,33 @@ void searchContact()
     fclose(fp);
 }
 
+// deleting contact from book
 void deleteContact()
 {
     CB c;
     char deleteName[50];
     int found = 0;
 
-    FILE *fp = fopen("contact/contacts_list.txt", "r");
+    const char *path = "contact/contacts_list.txt";
+    const char *tempPath = "contact/temp.txt";
+
+    FILE *fp = fopen(path, "r");
+    FILE *temp = fopen(tempPath, "w");
+
     if (fp == NULL)
     {
         printf("No contacts found!\n");
+        if (temp) fclose(temp);
         return;
     }
-
-    FILE *temp = fopen("contact/temp.txt", "w");
     if (temp == NULL)
     {
-        printf("Error creating temporary file.\n");
+        printf("Error creating temporary file!\n");
         fclose(fp);
         return;
     }
 
+    // getting name to delete
     printf("Enter name to delete: ");
     scanf("%49s", deleteName);
 
@@ -147,41 +161,34 @@ void deleteContact()
         else
         {
             found = 1;
-            // skip writing this contact -> effectively deletes it
         }
     }
-
+    // closing files
     fclose(fp);
     fclose(temp);
 
+    if (remove(path) != 0)
+    {
+        printf("Warning: could not remove original file.\n");
+    }
+    if (rename(tempPath, path) != 0)
+    {
+        printf("Warning: could not rename temporary file.\n");
+    }
+
     if (found)
-    {
-        if (remove("contact/contacts_list.txt") != 0)
-        {
-            printf("Error removing original contacts file.\n");
-            return;
-        }
-        if (rename("contact/temp.txt", "contact/contacts_list.txt") != 0)
-        {
-            printf("Error renaming temp file.\n");
-            return;
-        }
         printf("Contact Deleted Successfully!\n");
-    }
     else
-    {
-        // No contact found -> remove temp and keep original
-        remove("contact/temp.txt");
         printf("Contact Not Found!\n");
-    }
 }
 
+// main function
 int main()
 {
     int choice;
 
     FirstPage();
-
+    // menu display
     while (1)
     {
         printf("\n--- CONTACT BOOK MENU ---\n");
@@ -194,11 +201,10 @@ int main()
 
         if (scanf("%d", &choice) != 1)
         {
-            // clear invalid input
+            // invalid input: clear stdin and continue
             int ch;
-            while ((ch = getchar()) != '\n' && ch != EOF)
-                ;
-            printf("Invalid input. Please enter a number.\n");
+            while ((ch = getchar()) != '\n' && ch != EOF) ;
+            printf("Invalid input. Try again.\n");
             continue;
         }
 
@@ -224,3 +230,4 @@ int main()
         }
     }
 }
+
