@@ -23,7 +23,8 @@ int FirstPage()
     {
         printf(".");
         fflush(stdout);
-        for (int j = 0; j < 200000000; j++) ; 
+        for (int j = 0; j < 200000000; j++)
+            ;
     }
     printf("\n\n");
     return 0;
@@ -33,7 +34,7 @@ int FirstPage()
 void addContact()
 {
     CB c;
-    const char *path = "contact/contacts_list.txt"; 
+    const char *path = "contact/contacts_list.txt";
     FILE *fp = fopen(path, "a");
 
     if (fp == NULL)
@@ -48,16 +49,15 @@ void addContact()
     while (1)
     {
         printf("Enter Phone Number: ");
-        scanf("%19s", c.phone);
+        scanf("%10s", c.phone); // allow only 10 characters
 
-        if (strlen(c.phone) != 10)
+        if (strlen(c.phone) == 10)
         {
-            printf("\nInvalid Phone Number! Please enter a 10-digit number.\n");
-        }
-        else
-        {
+            
+            // continue;
             break;
         }
+        printf("\nInvalid Phone Number! Please enter a 10-digit number.\n");
     }
 
     fprintf(fp, "%s %s\n", c.name, c.phone);
@@ -138,7 +138,8 @@ void deleteContact()
     if (fp == NULL)
     {
         printf("No contacts found!\n");
-        if (temp) fclose(temp);
+        if (temp)
+            fclose(temp);
         return;
     }
     if (temp == NULL)
@@ -203,7 +204,8 @@ int main()
         {
             // invalid input: clear stdin and continue
             int ch;
-            while ((ch = getchar()) != '\n' && ch != EOF) ;
+            while ((ch = getchar()) != '\n' && ch != EOF)
+                ;
             printf("Invalid input. Try again.\n");
             continue;
         }
@@ -230,4 +232,3 @@ int main()
         }
     }
 }
-
