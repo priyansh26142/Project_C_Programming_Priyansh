@@ -6,13 +6,13 @@ typedef struct Contact Book
 {
     char name[50];
     char phone[20];
- } CB;
+} CB;
 
 int FirstPage()
 {
     printf("\n\n");
     printf("=====================================================\n");
-    printf("             WELCOME TO CONTACT BOOK\n");
+    printf("\t\tWELCOME TO CONTACT BOOK\t\t\t\t\t\n");
     printf("=====================================================\n");
     printf("                 Developed in C Language\n");
     printf("                 Save | Search | Delete\n");
