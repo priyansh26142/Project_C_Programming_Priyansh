@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct Contact Book
+typedef struct ContactBook
 {
     char name[50];
     char phone[20];
@@ -23,8 +23,8 @@ int FirstPage()
     {
         printf(".");
         fflush(stdout);
-        for (int j = 0; j < 200000000; j++)
-            ;
+        for (volatile long j = 0; j < 20000000; j++)
+            ; // smaller busy loop
     }
     printf("\n\n");
     return 0;
@@ -32,30 +32,29 @@ int FirstPage()
 
 void addContact()
 {
-    struct CB;
-    FILE *fp = fopen("contact/contact_list.txt", "a");
-
+    CB c;
+    FILE *fp = fopen("contact/contacts_list.txt", "a");
     if (fp == NULL)
     {
-        printf("Error opening file!\n");
+        printf("Error opening file! Make sure 'contact' directory exists.\n");
         return;
     }
 
     printf("Enter Name: ");
-    scanf("%s", c.name);
+    scanf("%49s", c.name); // limit width
+
     while (1)
     {
-
-        printf("Enter Phone Number: ");
-        scanf("%s", c.phone);
+        printf("Enter Phone Number (10 digits): ");
+        scanf("%19s", c.phone);
         if (strlen(c.phone) != 10)
         {
+            printf("Invalid Phone Number! Please enter a 10-digit number.\n");
         }
         else
         {
             break;
         }
-        printf("\nInvalid Phone Number! Please enter a 10-digit number.\n");
     }
 
     fprintf(fp, "%s %s\n", c.name, c.phone);
@@ -66,17 +65,16 @@ void addContact()
 
 void viewContacts()
 {
-    struct CB;
+    CB c;
     FILE *fp = fopen("contact/contacts_list.txt", "r");
-
     if (fp == NULL)
     {
         printf("No contacts found!\n");
         return;
     }
 
-    printf("\t\t\t\n--- Contact List ---\n");
-    while (fscanf(fp, "%s %s", c.name, c.phone) != EOF)
+    printf("\n--- Contact List ---\n");
+    while (fscanf(fp, "%49s %19s", c.name, c.phone) == 2)
     {
         printf("Name: %-15s Phone Number: %-15s\n", c.name, c.phone);
     }
@@ -85,12 +83,11 @@ void viewContacts()
 
 void searchContact()
 {
-    struct CB;
+    CB c;
     char searchName[50];
     int found = 0;
 
     FILE *fp = fopen("contact/contacts_list.txt", "r");
-
     if (fp == NULL)
     {
         printf("No contacts found!\n");
@@ -98,9 +95,9 @@ void searchContact()
     }
 
     printf("Enter name to search: ");
-    scanf("%s", searchName);
+    scanf("%49s", searchName);
 
-    while (fscanf(fp, "%s %s", c.name, c.phone) != EOF)
+    while (fscanf(fp, "%49s %19s", c.name, c.phone) == 2)
     {
         if (strcmp(c.name, searchName) == 0)
         {
@@ -119,23 +116,29 @@ void searchContact()
 
 void deleteContact()
 {
-    struct CB;
+    CB c;
     char deleteName[50];
     int found = 0;
 
     FILE *fp = fopen("contact/contacts_list.txt", "r");
-    FILE *temp = fopen("temp.txt", "w");
-
     if (fp == NULL)
     {
         printf("No contacts found!\n");
         return;
     }
 
-    printf("Enter name to delete: ");
-    scanf("%s", deleteName);
+    FILE *temp = fopen("contact/temp.txt", "w");
+    if (temp == NULL)
+    {
+        printf("Error creating temporary file.\n");
+        fclose(fp);
+        return;
+    }
 
-    while (fscanf(fp, "%s %s", c.name, c.phone) != EOF)
+    printf("Enter name to delete: ");
+    scanf("%49s", deleteName);
+
+    while (fscanf(fp, "%49s %19s", c.name, c.phone) == 2)
     {
         if (strcmp(c.name, deleteName) != 0)
         {
@@ -144,19 +147,33 @@ void deleteContact()
         else
         {
             found = 1;
+            // skip writing this contact -> effectively deletes it
         }
     }
 
     fclose(fp);
     fclose(temp);
 
-    remove("contact/contacts_list.txt");
-    rename("contact/temp.txt", "contact/contacts_list.txt");
-
     if (found)
+    {
+        if (remove("contact/contacts_list.txt") != 0)
+        {
+            printf("Error removing original contacts file.\n");
+            return;
+        }
+        if (rename("contact/temp.txt", "contact/contacts_list.txt") != 0)
+        {
+            printf("Error renaming temp file.\n");
+            return;
+        }
         printf("Contact Deleted Successfully!\n");
+    }
     else
+    {
+        // No contact found -> remove temp and keep original
+        remove("contact/temp.txt");
         printf("Contact Not Found!\n");
+    }
 }
 
 int main()
@@ -175,11 +192,15 @@ int main()
         printf("5. Exit\n");
         printf("Enter your choice: ");
 
-        scanf("%d ", &choice);
-        printf("\n");
-        printf("You selected option %d\n", choice);
-        printf("\n");
-        printf("Processing your request...\n");
+        if (scanf("%d", &choice) != 1)
+        {
+            // clear invalid input
+            int ch;
+            while ((ch = getchar()) != '\n' && ch != EOF)
+                ;
+            printf("Invalid input. Please enter a number.\n");
+            continue;
+        }
 
         switch (choice)
         {
