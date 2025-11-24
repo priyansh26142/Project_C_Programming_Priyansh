@@ -8,7 +8,7 @@ typedef struct Contact Book
     char phone[20];
  } CB;
 
-int openingPage()
+int FirstPage()
 {
     printf("\n\n");
     printf("=====================================================\n");
