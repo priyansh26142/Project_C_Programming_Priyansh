@@ -2,13 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct Contact
+typedef struct Contact Book
 {
     char name[50];
     char phone[20];
-};
+ } CB;
 
-void openingPage()
+int openingPage()
 {
     printf("\n\n");
     printf("=====================================================\n");
@@ -17,21 +17,22 @@ void openingPage()
     printf("                 Developed in C Language\n");
     printf("                 Save | Search | Delete\n");
     printf("-----------------------------------------------------\n");
-    printf("                    Loading...");
+    printf("                    Loading.......");
 
     for (int i = 0; i < 6; i++)
     {
         printf(".");
         fflush(stdout);
-        for (int j = 0; j < 200000000; j++) 
+        for (int j = 0; j < 200000000; j++)
             ;
     }
     printf("\n\n");
+    return 0;
 }
 
 void addContact()
 {
-    struct Contact c;
+    struct CB;
     FILE *fp = fopen("contact/contacts.txt", "a");
 
     if (fp == NULL)
@@ -42,14 +43,17 @@ void addContact()
 
     printf("Enter Name: ");
     scanf("%s", c.name);
-    while(1){
+    while (1)
+    {
 
         printf("Enter Phone Number: ");
         scanf("%s", c.phone);
         printf("Invalid Phone Number! Please enter a 10-digit number.\n");
-        if(strlen(c.phone)!=10){
+        if (strlen(c.phone) != 10)
+        {
         }
-        else{
+        else
+        {
             break;
         }
     }
@@ -62,7 +66,7 @@ void addContact()
 
 void viewContacts()
 {
-    struct Contact c;
+    struct CB;
     FILE *fp = fopen("contact/contacts.txt", "r");
 
     if (fp == NULL)
@@ -81,7 +85,7 @@ void viewContacts()
 
 void searchContact()
 {
-    struct Contact c;
+    struct CB;
     char searchName[50];
     int found = 0;
 
@@ -115,7 +119,7 @@ void searchContact()
 
 void deleteContact()
 {
-    struct Contact c;
+    struct CB;
     char deleteName[50];
     int found = 0;
 
