@@ -48,7 +48,7 @@ void addContact()
 
         printf("Enter Phone Number: ");
         scanf("%s", c.phone);
-        printf("Invalid Phone Number! Please enter a 10-digit number.\n");
+        printf("\nInvalid Phone Number! Please enter a 10-digit number.\n");
         if (strlen(c.phone) != 10)
         {
         }
@@ -75,10 +75,10 @@ void viewContacts()
         return;
     }
 
-    printf("\n--- Contact List ---\n");
+    printf("\t\t\t\n--- Contact List ---\n");
     while (fscanf(fp, "%s %s", c.name, c.phone) != EOF)
     {
-        printf("Name: %-15s Phone: %s\n", c.name, c.phone);
+        printf("Name: %-15s Phone Number: %-15s\n", c.name, c.phone);
     }
     fclose(fp);
 }
@@ -174,7 +174,8 @@ int main()
         printf("4. Delete Contact\n");
         printf("5. Exit\n");
         printf("Enter your choice: ");
-        scanf("%d", &choice);
+
+        scanf("%d ", &choice);
 
         switch (choice)
         {
