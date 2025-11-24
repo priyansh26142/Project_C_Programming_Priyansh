@@ -48,7 +48,6 @@ void addContact()
 
         printf("Enter Phone Number: ");
         scanf("%s", c.phone);
-        printf("\nInvalid Phone Number! Please enter a 10-digit number.\n");
         if (strlen(c.phone) != 10)
         {
         }
@@ -56,6 +55,7 @@ void addContact()
         {
             break;
         }
+        printf("\nInvalid Phone Number! Please enter a 10-digit number.\n");
     }
 
     fprintf(fp, "%s %s\n", c.name, c.phone);
@@ -163,7 +163,7 @@ int main()
 {
     int choice;
 
-    openingPage();
+    FirstPage();
 
     while (1)
     {
@@ -176,7 +176,10 @@ int main()
         printf("Enter your choice: ");
 
         scanf("%d ", &choice);
-        
+        printf("\n");
+        printf("You selected option %d\n", choice);
+        printf("\n");
+        printf("Processing your request...\n");
 
         switch (choice)
         {
