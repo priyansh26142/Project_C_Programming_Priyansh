@@ -14,8 +14,8 @@ int FirstPage()
     printf("=====================================================\n");
     printf("\t\tWELCOME TO CONTACT BOOK\t\t\t\t\t\n");
     printf("=====================================================\n");
-    printf("                 Developed in C Language\n");
-    printf("                 Save | Search | Delete\n");
+    printf("                \t\t Developed in C Language\n");
+    printf("               \t\t  Save | Search | Delete\n");
     printf("-----------------------------------------------------\n");
     printf("                    Loading.......");
 
@@ -33,7 +33,7 @@ int FirstPage()
 void addContact()
 {
     struct CB;
-    FILE *fp = fopen("contact/contacts.txt", "a");
+    FILE *fp = fopen("contact/contact_list.txt", "a");
 
     if (fp == NULL)
     {
@@ -67,7 +67,7 @@ void addContact()
 void viewContacts()
 {
     struct CB;
-    FILE *fp = fopen("contact/contacts.txt", "r");
+    FILE *fp = fopen("contact/contacts_list.txt", "r");
 
     if (fp == NULL)
     {
@@ -89,7 +89,7 @@ void searchContact()
     char searchName[50];
     int found = 0;
 
-    FILE *fp = fopen("contact/contacts.txt", "r");
+    FILE *fp = fopen("contact/contacts_list.txt", "r");
 
     if (fp == NULL)
     {
@@ -105,7 +105,7 @@ void searchContact()
         if (strcmp(c.name, searchName) == 0)
         {
             printf("\nContact Found!\n");
-            printf("Name: %s\nPhone: %s\n", c.name, c.phone);
+            printf("Name: %s\nPhone Number: %s\n", c.name, c.phone);
             found = 1;
             break;
         }
@@ -123,7 +123,7 @@ void deleteContact()
     char deleteName[50];
     int found = 0;
 
-    FILE *fp = fopen("contact/contacts.txt", "r");
+    FILE *fp = fopen("contact/contacts_list.txt", "r");
     FILE *temp = fopen("temp.txt", "w");
 
     if (fp == NULL)
@@ -150,8 +150,8 @@ void deleteContact()
     fclose(fp);
     fclose(temp);
 
-    remove("contact/contacts.txt");
-    rename("contact/temp.txt", "contact/contacts.txt");
+    remove("contact/contacts_list.txt");
+    rename("contact/temp.txt", "contact/contacts_list.txt");
 
     if (found)
         printf("Contact Deleted Successfully!\n");
