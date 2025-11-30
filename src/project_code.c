@@ -47,7 +47,7 @@ void addContact()
     scanf("%49s", c.name); 
    
 
-
+// getting phone number with validation
     while (1)
     {
         printf("Enter Phone Number: ");
@@ -117,7 +117,7 @@ void searchContact()
             break;
         }
     }
-
+// displaying  contatact not found message
     if (!found)
         printf("Contact Not Found!\n");
 
