@@ -43,14 +43,14 @@ void addContact()
         return;
     }
 
-    printf("Enter Name: ");
+    printf("enter your name: ");
     scanf("%49s", c.name); 
    
 
 // getting phone number with validation
     while (1)
     {
-        printf("Enter Phone Number: ");
+        printf("Enter your phone number: ");
         scanf("%10s", c.phone); // allow only 10 characters
 
         if (strlen(c.phone) == 10)
@@ -59,13 +59,13 @@ void addContact()
             // continue;
             break;
         }
-        printf("\nInvalid Phone Number! Please enter a 10-digit number.\n");
+        printf("\nyou have entered an invalid phone number! Please enter a valid 10-digit number.\n");
     }
 
     fprintf(fp, "%s %s\n", c.name, c.phone);
     fclose(fp);
 
-    printf("Contact Added Successfully!\n");
+    printf("Contact added successfully!\n");
 }
 
 // viewing contacts in book
@@ -77,7 +77,7 @@ void viewContacts()
 
     if (fp == NULL)
     {
-        printf("No contacts found!\n");
+        printf("No contacts found in book!\n");
         return;
     }
     // displaying contact list
@@ -100,11 +100,11 @@ void searchContact()
     FILE *fp = fopen(path, "r");
     if (fp == NULL)
     {
-        printf("No contacts found!\n");
+        printf("No contacts found in book!\n");
         return;
     }
     // getting name to search
-    printf("Enter name to search: ");
+    printf("Enter your name to search: ");
     scanf("%49s", searchName);
 
     while (fscanf(fp, "%49s %19s", c.name, c.phone) == 2)
@@ -119,7 +119,7 @@ void searchContact()
     }
 // displaying  contatact not found message
     if (!found)
-        printf("Contact Not Found!\n");
+        printf("Contact Not Found in the book!\n");
 
     fclose(fp);
 }
@@ -152,7 +152,7 @@ void deleteContact()
     }
 
     // getting name to delete
-    printf("Enter name to delete: ");
+    printf("Enter your name to delete from contact book: ");
     scanf("%49s", deleteName);
 
     while (fscanf(fp, "%49s %19s", c.name, c.phone) == 2)
@@ -182,7 +182,7 @@ void deleteContact()
     if (found)
         printf("Contact Deleted Successfully!\n");
     else
-        printf("Contact Not Found!\n");
+        printf("Contact Not Found in the book!\n");
 }
 
 // main function
