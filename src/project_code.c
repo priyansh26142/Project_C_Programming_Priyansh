@@ -8,7 +8,7 @@ typedef struct ContactBook
     char phone[20];
 } CB;
 
-int FirstPage()
+int firstPage()
 {
     printf("\n\n");
     printf("=====================================================\n");
@@ -34,7 +34,7 @@ int FirstPage()
 void addContact()
 {
     CB c;
-    const char *path = "contact/contacts_list.txt";
+    const char *path = "contact/sample_input.txt";
     FILE *fp = fopen(path, "a");
 
     if (fp == NULL)
@@ -44,7 +44,9 @@ void addContact()
     }
 
     printf("Enter Name: ");
-    scanf("%49s", c.name);
+    scanf("%49s", c.name); 
+   
+
 
     while (1)
     {
@@ -70,7 +72,7 @@ void addContact()
 void viewContacts()
 {
     CB c;
-    const char *path = "contact/contacts_list.txt";
+    const char *path = "contact/sample_input.txt";
     FILE *fp = fopen(path, "r");
 
     if (fp == NULL)
@@ -93,7 +95,7 @@ void searchContact()
     CB c;
     char searchName[50];
     int found = 0;
-    const char *path = "contact/contacts_list.txt";
+    const char *path = "contact/sample_input.txt";
 
     FILE *fp = fopen(path, "r");
     if (fp == NULL)
@@ -129,7 +131,7 @@ void deleteContact()
     char deleteName[50];
     int found = 0;
 
-    const char *path = "contact/contacts_list.txt";
+    const char *path = "contact/sample_input.txt";
     const char *tempPath = "contact/temp.txt";
 
     FILE *fp = fopen(path, "r");
@@ -188,7 +190,7 @@ int main()
 {
     int choice;
 
-    FirstPage();
+    firstPage();
     // menu display
     while (1)
     {
